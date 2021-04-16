@@ -64,7 +64,7 @@ public class ProfesorController extends Profesor implements Serializable{
         } else {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
                     "Ocurrio un error al insertar el profesor");
-            FacesContext.getCurrentInstance().addMessage("editaProfesorForm:codigo", msg);
+            FacesContext.getCurrentInstance().addMessage("profesorJsonForm:codigo", msg);
             return "profesor.xhtml";
         }
     }
@@ -82,7 +82,7 @@ public class ProfesorController extends Profesor implements Serializable{
         } else {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
                     "Posiblemente el registro no exista");
-            FacesContext.getCurrentInstance().addMessage("profesorJsonForm:identificacion", msg);
+            FacesContext.getCurrentInstance().addMessage("profesorJsonForm:codigo", msg);
 
         }
     }
@@ -106,7 +106,7 @@ public class ProfesorController extends Profesor implements Serializable{
         setTiraJson(tira.toString());
     }
     
-    public void crearObjetoProspecto() {
+    public void crearObjetoProfesor() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
             JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
@@ -132,7 +132,7 @@ public class ProfesorController extends Profesor implements Serializable{
         } else {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
                     "Ocurrio un error al actualizar el profesor");
-            FacesContext.getCurrentInstance().addMessage("editaProfesorForm:identificacion", msg);
+            FacesContext.getCurrentInstance().addMessage("profesorJsonForm:codigo", msg);
             return "profesor.xhtml";
         }
     }
@@ -143,7 +143,7 @@ public class ProfesorController extends Profesor implements Serializable{
         } else {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
                     "Ocurrio un error al eliminar el profesor");
-            FacesContext.getCurrentInstance().addMessage("editaProfesorForm:identificacion", msg);
+            FacesContext.getCurrentInstance().addMessage("profesorJsonForm:codigo", msg);
             return "profesor.xhtml";
         }
     }
