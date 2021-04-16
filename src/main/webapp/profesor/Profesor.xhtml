@@ -15,13 +15,13 @@
                         <b:panel look="primary" title="Profesor">
                             <b:row>
                                 <b:column medium-screen="1">
-                                    <h:outputLabel value="NombreProfesor" for="nombreProfe"/>                                    
+                                    <h:outputLabel value="Codigo" for="codigo"/>                                    
                                 </b:column>
                                 <b:column medium-screen="2">
-                                    <b:inputText placeholder="Nombre completo"
+                                    <b:inputText placeholder="Codigo"
                                                  required="true"
                                                  id="codigo"
-                                                 value="#{profesorController.nombreCompleto}"/>
+                                                 value="#{profesorController.codigo}"/>
                                 </b:column>
                                 <b:column medium-screen="1" >
                                     <b:commandButton value="Recupera"
@@ -31,7 +31,7 @@
                                                      update="@form" />                            
                                 </b:column>
                                 <b:column medium-screen="4" style-class="message">
-                                    <b:message for="cedula"/>                                    
+                                    <b:message for="codigo"/>                                    
                                 </b:column>
                             </b:row>
                             

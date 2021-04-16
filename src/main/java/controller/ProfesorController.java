@@ -8,7 +8,12 @@ package controller;
 import gestion.ProfesorGestion;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -16,7 +21,9 @@ import javax.faces.context.FacesContext;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
+import javax.json.JsonWriter;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -49,6 +56,18 @@ public class ProfesorController extends Profesor implements Serializable{
     public List<Profesor> getProfesores() {
         return ProfesorGestion.getProfesores();
     }
+    
+    public String insertProfesor() {
+        if (ProfesorGestion.insertProfesor(this)) {
+            return "profesor.xhtml";
+
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                    "Ocurrio un error al insertar el profesor");
+            FacesContext.getCurrentInstance().addMessage("editaProfesorForm:codigo", msg);
+            return "profesor.xhtml";
+        }
+    }
 
     public void recupera(String codigo) {
         Profesor e = ProfesorGestion.getProfesor(codigo);
@@ -67,17 +86,43 @@ public class ProfesorController extends Profesor implements Serializable{
 
         }
     }
-
-    public String insertProfesor() {
-        if (ProfesorGestion.insertProfesor(this)) {
-            return "profesor.xhtml";
-
-        } else {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-                    "Ocurrio un error al insertar el profesor");
-            FacesContext.getCurrentInstance().addMessage("editaProfesorForm:identificacion", msg);
-            return "profesor.xhtml";
+    
+    public void creaJson() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String fecha1 = format.format(this.getFechaCreacion());
+        String fecha2= format.format(this.getFechaNaci());
+        JsonObjectBuilder creadorJson = Json.createObjectBuilder();
+        JsonObject objectJson = creadorJson.add("codigo", this.getCodigo())
+                .add("nombreCopleto", this.getNombreCompleto())
+                .add("materia", this.getMateria())
+                .add("notaProfesor", this.getNotaProfesor())
+                .add("fechaCreacion", fecha1)
+                .add("fechaNacimiento", fecha2)
+                .add("genero", this.getGenero())
+                .build();
+        StringWriter tira = new StringWriter();
+        JsonWriter jsonWriter = Json.createWriter(tira);
+        jsonWriter.writeObject(objectJson);
+        setTiraJson(tira.toString());
+    }
+    
+    public void crearObjetoProspecto() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
+            JsonObject objectJson = lectorJson.readObject();
+            this.setCodigo(objectJson.getString("codigo"));
+            this.setNombreCompleto(objectJson.getString("nombreCompleto"));
+            this.setMateria(objectJson.getString("materia"));
+            this.setNotaProfesor(objectJson.getInt("notaProfesor"));
+            this.setFechaCreacion(format.parse(objectJson.getString("fechaCreacion")));
+            this.setFechaNaci(format.parse(objectJson.getString("fechaNacimiento")));
+            this.setGenero(objectJson.getString("genero").charAt(0));
+        } catch (ParseException ex) {
+            Logger.getLogger(ProfesorController.class.getName()).
+                    log(Level.SEVERE, null, ex);
         }
+
     }
 
     public String updateProfesor() {
