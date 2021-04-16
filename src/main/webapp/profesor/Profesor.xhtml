@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui">
+
+    <body>
+        <ui:composition template="./../resources/templates/plantilla.xhtml">
+
+            <ui:define name="content">
+                
+                <h:form id="profesorJsonForm">
+                    <b:container fluid="true">
+                        <b:panel look="primary" title="Profesor">
+                            <b:row>
+                                <b:column medium-screen="1">
+                                    <h:outputLabel value="NombreProfesor" for="nombreProfe"/>                                    
+                                </b:column>
+                                <b:column medium-screen="2">
+                                    <b:inputText placeholder="Nombre completo"
+                                                 required="true"
+                                                 id="codigo"
+                                                 value="#{profesorController.nombreCompleto}"/>
+                                </b:column>
+                                <b:column medium-screen="1" >
+                                    <b:commandButton value="Recupera"
+                                                     icon="search"
+                                                     look="success"
+                                                     onclick="ajax:profesorController.recupera(profesorController.codigo)" 
+                                                     update="@form" />                            
+                                </b:column>
+                                <b:column medium-screen="4" style-class="message">
+                                    <b:message for="cedula"/>                                    
+                                </b:column>
+                            </b:row>
+                            
+                            
+                            
+                        </b:panel> 
+                    </b:container>
+                    <b:container fluid="true">
+                        <b:panelGrid colSpans="6,6" size="sm">
+                            <b:panel title="Objeto" look="primary">
+                                <b:row>
+                                    <b:column small-screen="3">
+                                        <b:commandButton value="Pasar a Json"
+                                                         icon="pi pi-check"
+                                                         look="danger"
+                                                         onclick="ajax:prospectoController.creaJson()" 
+                                                         update="@form" />   
+                                    </b:column>
+                                </b:row>
+                                <b:row tooltip="El codigo no se modifica">
+                                <b:column medium-screen="2">
+                                    <h:outputLabel value="Codigo" for="codigo"/>
+                                </b:column>
+                                <b:column medium-screen="2">
+                                    <b:inputText placeholder="Codigo"
+                                                 required="true"
+                                                 id="codigo"
+                                                 value="#{profesorController.codigo}"
+                                                 />
+                                </b:column>
+                                <b:column medium-screen="6" style-class="message">
+                                    <b:message for="codigo"/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column medium-screen="2">
+                                    <h:outputLabel value="Nombre" for="nombre"/>
+                                </b:column>
+                                <b:column medium-screen="2">
+                                    <b:inputText placeholder="Nombre"
+                                                 required="true"                                                 
+                                                 id="nombre"
+                                                 value="#{profesorController.nombreCompleto}"/>
+                                </b:column>
+                                <b:column medium-screen="6" style-class="message">
+                                    <b:message for="nombre"/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column medium-screen="2">
+                                    <h:outputLabel value="Materia" for="materia"/>
+                                </b:column>
+                                <b:column medium-screen="2">
+                                    <b:inputText placeholder="Materia"
+                                                 required="true"                                                 
+                                                 id="materia"
+                                                 value="#{profesorController.materia}"/>
+                                </b:column>
+                                <b:column medium-screen="6" style-class="message">
+                                    <b:message for="materia"/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column medium-screen="2">
+                                    <h:outputLabel value="NotaProfesor" for="notaProfesor"/>
+                                </b:column>
+                                <b:column medium-screen="2">
+                                    <b:inputText placeholder="NotaProfesor"
+                                                 required="true"                                                 
+                                                 id="notaProfesor"
+                                                 value="#{profesorController.notaProfesor}"/>
+                                </b:column>
+                                <b:column medium-screen="6" style-class="message">
+                                    <b:message for="notaProfesor"/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column medium-screen="2">
+                                    <h:outputLabel value="FechaCreacion" for="fechaCreacion"/>
+                                </b:column>
+                                <b:column medium-screen="2">
+                                    <b:datepicker required="true"                                                 
+                                                  id="fechaCreacion"
+                                                  value="#{profesorController.fechaCreacion}"/>
+                                </b:column>
+                                <b:column medium-screen="6" style-class="message">
+                                    <b:message for="fechaCreacion"/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column medium-screen="2">
+                                    <h:outputLabel value="Fecha de Nacimiento" for="fechaNacimimento"/>
+                                </b:column>
+                                <b:column medium-screen="2">
+                                    <b:datepicker required="true"                                                 
+                                                  id="fechaNacimiento"
+                                                  value="#{profesorController.fechaNaci}"/>
+                                </b:column>
+                                <b:column medium-screen="6" style-class="message">
+                                    <b:message for="fechaNacimiento"/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column medium-screen="2">
+                                    <h:outputLabel value="Genero" for="genero"/>
+                                </b:column>
+                                <b:column medium-screen="4">
+                                    <b:panelGrid columns="2">
+                                        <b:radiobutton value="#{profesorController.genero}"
+                                                       itemLabel="Masculino" itemValue="M"/>
+                                        <b:radiobutton value="#{profesorController.genero}"
+                                                       itemLabel="Femenino" itemValue="F"/>
+                                    </b:panelGrid>
+                                </b:column>
+                                <b:column medium-screen="6" style-class="message">
+                                    <b:message for="genero"/>
+                                </b:column>
+                            </b:row>
+ 
+                            </b:panel>
+                            
+                            <b:panel title="Json" look="primary">
+                                <b:row> 
+                                    <b:column small-screen="2" >
+                                        <b:commandButton value="Pasar a Objeto"
+                                                         icon="pi pi-check"
+                                                         look="danger"
+                                                         onclick="ajax:profesorController.crearObjetoProfesor()" 
+                                                         update="@form" />                            
+                                    </b:column>
+                                </b:row>
+                                <b:row> 
+                                    <b:column small-screen="12" >
+                                        <b:inputTextarea rows="9" value="#{profesorController.tiraJson}"/>                     
+                                    </b:column>
+                                </b:row>
+                                <b:row> 
+                                    <b:column small-screen="2" >
+                                        <b:commandButton value="Respaldo Json"
+                                                         icon-awesome="fa-save"
+                                                         look="success"
+                                                         onclick="ajax:profesorController.crearObjetoProfesor()" 
+                                                         update="@form" />                            
+                                    </b:column>
+                                </b:row>
+                            </b:panel>                            
+                        </b:panelGrid>
+                    </b:container>
+                </h:form>
+            </ui:define>
+            
+        </ui:composition>
+    </body>
+</html>
