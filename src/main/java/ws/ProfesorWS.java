@@ -5,7 +5,9 @@
  */
 package ws;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import gestion.ProfesorGestion;
+import java.time.LocalDate;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -32,7 +34,6 @@ public class ProfesorWS {
 
     @Context
     private UriInfo context;
-
     /**
      * Creates a new instance of ProfesorWS
      */
@@ -56,17 +57,18 @@ public class ProfesorWS {
      * @return an instance of java.lang.String
      * http://localhost:8080/PruebaExamen-1.0-SNAPSHOT/resources/profesor/1;
      */
+    
 //    @GET
 //    @Path("/{id}")
 //    @Produces(MediaType.APPLICATION_JSON)
 //    public Profesor getProfesor(@PathParam("id") String codigo) {
-//        //TODO return proper representation object
+//        
 //        Profesor profesor = new Profesor(
 //                "The object does not exist",
 //                "",
 //                "",
 //                0.00,
-//                "YYYY-MM-DD",
+//                ,
 //                "",
 //                "");
 //        

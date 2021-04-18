@@ -57,18 +57,6 @@ public class ProfesorController extends Profesor implements Serializable{
         return ProfesorGestion.getProfesores();
     }
     
-    public String insertProfesor() {
-        if (ProfesorGestion.insertProfesor(this)) {
-            return "profesor.xhtml";
-
-        } else {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-                    "Ocurrio un error al insertar el profesor");
-            FacesContext.getCurrentInstance().addMessage("profesorJsonForm:codigo", msg);
-            return "profesor.xhtml";
-        }
-    }
-
     public void recupera(String codigo) {
         Profesor e = ProfesorGestion.getProfesor(codigo);
         if (e != null) {
@@ -124,31 +112,6 @@ public class ProfesorController extends Profesor implements Serializable{
         }
 
     }
-
-    public String updateProfesor() {
-        if (ProfesorGestion.updateProfesor(this)) {
-            return "profesor.xhtml";
-
-        } else {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-                    "Ocurrio un error al actualizar el profesor");
-            FacesContext.getCurrentInstance().addMessage("profesorJsonForm:codigo", msg);
-            return "profesor.xhtml";
-        }
-    }
-
-    public String deleteProfesor() {
-        if (ProfesorGestion.deleteProfesor(this)) {
-            return "profesor.xhtml";
-        } else {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-                    "Ocurrio un error al eliminar el profesor");
-            FacesContext.getCurrentInstance().addMessage("profesorJsonForm:codigo", msg);
-            return "profesor.xhtml";
-        }
-    }
-
-    
 
     public int getId() {
         return id;
