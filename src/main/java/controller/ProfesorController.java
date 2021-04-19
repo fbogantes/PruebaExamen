@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.json.Json;
@@ -38,12 +38,12 @@ import model.Profesor;
  * @author Frey
  */
 @Named(value = "profesorController")
-@RequestScoped
+@SessionScoped
 public class ProfesorController extends Profesor implements Serializable{
     
-    private int id; 
+//    private int id; 
     private String tiraJson = "xxxx";
-    private String salida; 
+//    private String salida; 
 
 
     private final String URI = "http://localhost:8080/PruebaExamen-1.0-SNAPSHOT/resources/profesor";
@@ -113,14 +113,14 @@ public class ProfesorController extends Profesor implements Serializable{
 
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
+//
     public String getTiraJson() {
         return tiraJson;
     }
@@ -128,61 +128,61 @@ public class ProfesorController extends Profesor implements Serializable{
     public void setTiraJson(String tiraJson) {
         this.tiraJson = tiraJson;
     }
-
-    public String getSalida() {
-        return salida;
-    }
-
-    public void setSalida(String salida) {
-        this.salida = salida;
-    }
-    
-    public void hacerGetAll() {
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(URI);
-        JsonArray response = target.request(MediaType.APPLICATION_JSON)
-                .get(JsonArray.class);
-        salida = response.toString();
-    }
-
-
-    public void hacerGet() {
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(URI + "/" + id);
-        JsonObject response = target.request(MediaType.APPLICATION_JSON)
-                .get(JsonObject.class);
-        salida = response.toString();
-    }
-
-
-    public void hacerDelete() {
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(URI + "/" + id);
-        JsonObject response = target.request(MediaType.APPLICATION_JSON)
-                .delete(JsonObject.class);
-        salida = response.asJsonObject().toString();
-    }
-
-
-    public void hacerPut() {
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(URI);
-        JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
-        JsonObject jsonObject = lectorJson.readObject();
-        Response response = target.request(MediaType.APPLICATION_JSON)
-                .put(Entity.json(jsonObject));
-        salida = response.readEntity(String.class);
-    }
-
-
-    public void hacerPost() {
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(URI);
-        JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
-        JsonObject jsonObject = lectorJson.readObject();
-        Response response = target.request(MediaType.APPLICATION_JSON)
-                .post(Entity.json(jsonObject));
-        salida = response.readEntity(String.class);
-    }
+//
+//    public String getSalida() {
+//        return salida;
+//    }
+//
+//    public void setSalida(String salida) {
+//        this.salida = salida;
+//    }
+//    
+//    public void hacerGetAll() {
+//        Client client = ClientBuilder.newClient();
+//        WebTarget target = client.target(URI);
+//        JsonArray response = target.request(MediaType.APPLICATION_JSON)
+//                .get(JsonArray.class);
+//        salida = response.toString();
+//    }
+//
+//
+//    public void hacerGet() {
+//        Client client = ClientBuilder.newClient();
+//        WebTarget target = client.target(URI + "/" + id);
+//        JsonObject response = target.request(MediaType.APPLICATION_JSON)
+//                .get(JsonObject.class);
+//        salida = response.toString();
+//    }
+//
+//
+//    public void hacerDelete() {
+//        Client client = ClientBuilder.newClient();
+//        WebTarget target = client.target(URI + "/" + id);
+//        JsonObject response = target.request(MediaType.APPLICATION_JSON)
+//                .delete(JsonObject.class);
+//        salida = response.asJsonObject().toString();
+//    }
+//
+//
+//    public void hacerPut() {
+//        Client client = ClientBuilder.newClient();
+//        WebTarget target = client.target(URI);
+//        JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
+//        JsonObject jsonObject = lectorJson.readObject();
+//        Response response = target.request(MediaType.APPLICATION_JSON)
+//                .put(Entity.json(jsonObject));
+//        salida = response.readEntity(String.class);
+//    }
+//
+//
+//    public void hacerPost() {
+//        Client client = ClientBuilder.newClient();
+//        WebTarget target = client.target(URI);
+//        JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
+//        JsonObject jsonObject = lectorJson.readObject();
+//        Response response = target.request(MediaType.APPLICATION_JSON)
+//                .post(Entity.json(jsonObject));
+//        salida = response.readEntity(String.class);
+//    }
     
 }

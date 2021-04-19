@@ -38,20 +38,11 @@
                         <b:panelGrid colSpans="6,6" size="sm">
                             <b:panel title="Objeto" look="primary">
                                 <b:row>
-                                    <b:column medium-screen="3">
-                                        <h:outputText value="Codigo"/>
-                                    </b:column>
-                                    <b:column medium-screen="4">
-                                        <b:inputText placeholder="Codigo"
-
-                                                     id="codigoP"
-                                                     value="#{profesorController.codigo}"/>
-                                    </b:column>
                                     <b:column small-screen="3">
                                         <b:commandButton value="Pasar a Json"
                                                          icon="pi pi-check"
                                                          look="danger"
-                                                         onclick="ajax:prospectoController.creaJson()" 
+                                                         onclick="ajax:profesorController.creaJson()" 
                                                          update="@form" />   
                                     </b:column>
                                 </b:row>
