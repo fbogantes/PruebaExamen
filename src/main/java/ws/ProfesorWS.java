@@ -6,8 +6,8 @@
 package ws;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import static com.mysql.cj.MysqlType.JSON;
 import gestion.ProfesorGestion;
-import java.time.LocalDate;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -58,27 +58,22 @@ public class ProfesorWS {
      * http://localhost:8080/PruebaExamen-1.0-SNAPSHOT/resources/profesor/1;
      */
     
-//    @GET
-//    @Path("/{id}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Profesor getProfesor(@PathParam("id") String codigo) {
-//        
-//        Profesor profesor = new Profesor(
-//                "The object does not exist",
-//                "",
-//                "",
-//                0.00,
-//                ,
-//                "",
-//                "");
-//        
-//        Profesor profesor2 = ProfesorGestion.getProfesor(codigo);
-//        if (profesor2 != null) {
-//            return profesor2;
-//        } else {
-//            return profesor;
-//        }
-//    }
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Profesor getProfesor(@PathParam("id") String codigo) {
+        
+        Profesor profesor = new Profesor(
+                
+                );
+        
+        Profesor profesor2 = ProfesorGestion.getProfesor(codigo);
+        if (profesor2 != null) {
+            return profesor2;
+        } else {
+            return profesor;
+        }
+    }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)

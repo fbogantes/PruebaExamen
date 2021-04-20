@@ -5,15 +5,24 @@
  */
 package controller;
 
+import gestion.MateriaGestion;
+import gestion.NotaGestion;
 import gestion.ProfesorGestion;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -24,6 +33,8 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.JsonWriter;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -31,7 +42,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.Profesor;
-
 
 /**
  *
@@ -41,9 +51,9 @@ import model.Profesor;
 @SessionScoped
 public class ProfesorController extends Profesor implements Serializable{
     
-//    private int id; 
+    private int id; 
     private String tiraJson = "xxxx";
-//    private String salida; 
+    private String salida; 
 
 
     private final String URI = "http://localhost:8080/PruebaExamen-1.0-SNAPSHOT/resources/profesor";
@@ -81,7 +91,7 @@ public class ProfesorController extends Profesor implements Serializable{
         String fecha2= format.format(this.getFechaNaci());
         JsonObjectBuilder creadorJson = Json.createObjectBuilder();
         JsonObject objectJson = creadorJson.add("codigo", this.getCodigo())
-                .add("nombreCopleto", this.getNombreCompleto())
+                .add("nombreCompleto", this.getNombreCompleto())
                 .add("materia", this.getMateria())
                 .add("notaProfesor", this.getNotaProfesor())
                 .add("fechaCreacion", fecha1)
@@ -113,14 +123,14 @@ public class ProfesorController extends Profesor implements Serializable{
 
     }
 
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getTiraJson() {
         return tiraJson;
     }
@@ -128,61 +138,111 @@ public class ProfesorController extends Profesor implements Serializable{
     public void setTiraJson(String tiraJson) {
         this.tiraJson = tiraJson;
     }
-//
-//    public String getSalida() {
-//        return salida;
-//    }
-//
-//    public void setSalida(String salida) {
-//        this.salida = salida;
-//    }
-//    
-//    public void hacerGetAll() {
-//        Client client = ClientBuilder.newClient();
-//        WebTarget target = client.target(URI);
-//        JsonArray response = target.request(MediaType.APPLICATION_JSON)
-//                .get(JsonArray.class);
-//        salida = response.toString();
-//    }
-//
-//
-//    public void hacerGet() {
-//        Client client = ClientBuilder.newClient();
-//        WebTarget target = client.target(URI + "/" + id);
-//        JsonObject response = target.request(MediaType.APPLICATION_JSON)
-//                .get(JsonObject.class);
-//        salida = response.toString();
-//    }
-//
-//
-//    public void hacerDelete() {
-//        Client client = ClientBuilder.newClient();
-//        WebTarget target = client.target(URI + "/" + id);
-//        JsonObject response = target.request(MediaType.APPLICATION_JSON)
-//                .delete(JsonObject.class);
-//        salida = response.asJsonObject().toString();
-//    }
-//
-//
-//    public void hacerPut() {
-//        Client client = ClientBuilder.newClient();
-//        WebTarget target = client.target(URI);
-//        JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
-//        JsonObject jsonObject = lectorJson.readObject();
-//        Response response = target.request(MediaType.APPLICATION_JSON)
-//                .put(Entity.json(jsonObject));
-//        salida = response.readEntity(String.class);
-//    }
-//
-//
-//    public void hacerPost() {
-//        Client client = ClientBuilder.newClient();
-//        WebTarget target = client.target(URI);
-//        JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
-//        JsonObject jsonObject = lectorJson.readObject();
-//        Response response = target.request(MediaType.APPLICATION_JSON)
-//                .post(Entity.json(jsonObject));
-//        salida = response.readEntity(String.class);
-//    }
+
+    public String getSalida() {
+        return salida;
+    }
+
+    public void setSalida(String salida) {
+        this.salida = salida;
+    }
     
+    public void hacerGetAll() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(URI);
+        JsonArray response = target.request(MediaType.APPLICATION_JSON)
+                .get(JsonArray.class);
+        salida = response.toString();
+    }
+
+
+    public void hacerGet() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(URI + "/" + id);
+        JsonObject response = target.request(MediaType.APPLICATION_JSON)
+                .get(JsonObject.class);
+        salida = response.toString();
+    }
+
+
+    public void hacerDelete() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(URI + "/" + id);
+        JsonObject response = target.request(MediaType.APPLICATION_JSON)
+                .delete(JsonObject.class);
+        salida = response.asJsonObject().toString();
+    }
+
+
+    public void hacerPut() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(URI);
+        JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
+        JsonObject jsonObject = lectorJson.readObject();
+        Response response = target.request(MediaType.APPLICATION_JSON)
+                .put(Entity.json(jsonObject));
+        salida = response.readEntity(String.class);
+    }
+
+
+    public void hacerPost() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(URI);
+        JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
+        JsonObject jsonObject = lectorJson.readObject();
+        Response response = target.request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(jsonObject));
+        salida = response.readEntity(String.class);
+    }
+    
+    
+    public void respaldo() {
+        ZipOutputStream out = null;
+        try {
+            
+            String json = ProfesorGestion.generarJson() + MateriaGestion.generarJson() + NotaGestion.generarJson();
+
+            File f = new File(FacesContext
+                    .getCurrentInstance().
+                    getExternalContext()
+                    .getRealPath("/respaldo") + "profesor.zip");
+            out = new ZipOutputStream(new FileOutputStream(f));
+            ZipEntry e = new ZipEntry("profesor.json");
+            out.putNextEntry(e);
+            byte[] data = json.getBytes();
+            out.write(data, 0, data.length);
+            out.closeEntry();
+            out.close();
+
+            File zipPath = new File(FacesContext
+                    .getCurrentInstance().
+                    getExternalContext()
+                    .getRealPath("/respaldo") + "profesor.zip");
+
+            byte[] zip = Files.readAllBytes(zipPath.toPath());
+
+            HttpServletResponse respuesta = (HttpServletResponse) FacesContext.getCurrentInstance()
+                    .getExternalContext().getResponse();
+            ServletOutputStream flujo = respuesta.getOutputStream();
+
+            respuesta.setContentType("application/pdf");
+            respuesta.addHeader("Content-disposition", "attachment; filename=profes.zip");
+
+            flujo.write(zip);
+            flujo.flush();
+            FacesContext.getCurrentInstance().responseComplete();
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProfesorController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProfesorController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                out.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ProfesorController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
 }

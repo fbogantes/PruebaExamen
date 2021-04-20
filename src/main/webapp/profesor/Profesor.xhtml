@@ -31,6 +31,13 @@
                                 <b:column medium-screen="4" style-class="message">
                                     <b:message for="codigo"/>                                    
                                 </b:column>
+                            
+                                <b:column small-screen="2">
+                                    <b:commandButton value="Respaldo"
+                                                     icon-awesome="fa-floppy-o"
+                                                     look="success"
+                                                     action="#{profesorController.respaldo()}"/>   
+                                </b:column>
                             </b:row>
                         </b:panel> 
                     </b:container>
@@ -128,15 +135,7 @@
                                         <b:inputTextarea rows="9" value="#{profesorController.tiraJson}"/>                     
                                     </b:column>
                                 </b:row>
-                                <b:row> 
-                                    <b:column small-screen="2" >
-                                        <b:commandButton value="Respaldo Json"
-                                                         icon-awesome="fa-save"
-                                                         look="success"
-                                                         onclick="ajax:profesorController.crearObjetoProfesor()" 
-                                                         update="@form" />                            
-                                    </b:column>
-                                </b:row>
+                                
                             </b:panel>                            
                         </b:panelGrid>
                     </b:container>

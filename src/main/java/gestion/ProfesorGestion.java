@@ -194,53 +194,5 @@ public class ProfesorGestion {
         return tiraJson;
     }
     
-    public void respaldo() {
-        ZipOutputStream out = null;
-        try {
-
-            String json = ProfesorGestion.generarJson();
-
-            File f = new File(FacesContext
-                    .getCurrentInstance().
-                    getExternalContext()
-                    .getRealPath("/respaldo") + "profesor.zip");
-            out = new ZipOutputStream(new FileOutputStream(f));
-            ZipEntry e = new ZipEntry("estudiantes.json");
-            out.putNextEntry(e);
-            byte[] data = json.getBytes();
-            out.write(data, 0, data.length);
-            out.closeEntry();
-            out.close();
-
-            File zipPath = new File(FacesContext
-                    .getCurrentInstance().
-                    getExternalContext()
-                    .getRealPath("/respaldo") + "estudiantes.zip");
-
-            byte[] zip = Files.readAllBytes(zipPath.toPath());
-
-            HttpServletResponse respuesta = (HttpServletResponse) FacesContext.getCurrentInstance()
-                    .getExternalContext().getResponse();
-            ServletOutputStream flujo = respuesta.getOutputStream();
-
-            respuesta.setContentType("application/pdf");
-            respuesta.addHeader("Content-disposition", "attachment; filename=estudiantes.zip");
-
-            flujo.write(zip);
-            flujo.flush();
-            FacesContext.getCurrentInstance().responseComplete();
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ProfesorController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ProfesorController.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                out.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ProfesorController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-    }
+    
 }
