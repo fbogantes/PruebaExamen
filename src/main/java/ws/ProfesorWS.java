@@ -62,17 +62,7 @@ public class ProfesorWS {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Profesor getProfesor(@PathParam("id") String codigo) {
-        
-        Profesor profesor = new Profesor(
-                
-                );
-        
-        Profesor profesor2 = ProfesorGestion.getProfesor(codigo);
-        if (profesor2 != null) {
-            return profesor2;
-        } else {
-            return profesor;
-        }
+        return ProfesorGestion.getProfesor(codigo);
     }
 
     @PUT
