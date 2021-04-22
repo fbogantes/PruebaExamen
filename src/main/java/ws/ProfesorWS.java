@@ -65,6 +65,13 @@ public class ProfesorWS {
         return ProfesorGestion.getProfesor(codigo);
     }
 
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public static String generarJson() {
+        //TODO return proper representation object
+        return ProfesorGestion.generarJson();
+    }
 //    @PUT
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    public Profesor putProfesor(Profesor profesor) {

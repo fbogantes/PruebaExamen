@@ -40,6 +40,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import ws.ProfesorWS;
 //import javax.enterprise.context.RequestScoped;
 //import javax.json.JsonArray;
 //import javax.ws.rs.client.Client;
@@ -133,8 +134,7 @@ public class ProfesorController extends Profesor implements Serializable{
     public void respaldo() {
         ZipOutputStream out = null;
         try {
-            
-            String json = ProfesorGestion.generarJson() + MateriaGestion.generarJson() + NotaGestion.generarJson();
+            String json = ProfesorWS.generarJson() + MateriaGestion.generarJson() + NotaGestion.generarJson();
 
             File f = new File(FacesContext
                     .getCurrentInstance().
