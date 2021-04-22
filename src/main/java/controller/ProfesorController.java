@@ -19,6 +19,7 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +36,18 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import model.Profesor;
 import javax.enterprise.context.RequestScoped;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+//import javax.enterprise.context.RequestScoped;
+//import javax.json.JsonArray;
+//import javax.ws.rs.client.Client;
+//import javax.ws.rs.client.ClientBuilder;
+//import javax.ws.rs.client.Entity;
+//import javax.ws.rs.client.WebTarget;
+//import javax.ws.rs.core.MediaType;
+//import javax.ws.rs.core.Response;
 
 /**
  *
@@ -44,9 +57,16 @@ import javax.enterprise.context.RequestScoped;
 @RequestScoped
 public class ProfesorController extends Profesor implements Serializable{
     
-    private int id; 
+    private int id;
     private String tiraJson = "";
     private String salida; 
+    private String codigo; 
+    private String nombreCompleto;
+    private String materia;
+    private double notaProfesor;
+    private Date fechaCreacion;
+    private Date fechaNaci;
+    private String genero;
 
 
     private final String URI = "http://localhost:8080/PruebaExamen-1.0-SNAPSHOT/resources/profesor";
@@ -56,30 +76,24 @@ public class ProfesorController extends Profesor implements Serializable{
     public ProfesorController() {
     }
     
-    public List<Profesor> getProfesores() {
-        return ProfesorGestion.getProfesores();
-    }
     
-    public void recupera(String codigo) {
-        Profesor e = ProfesorGestion.getProfesor(codigo);
-        if (e != null) {
-            this.setCodigo(e.getCodigo());
-            this.setNombreCompleto(e.getNombreCompleto());
-            this.setMateria(e.getMateria());
-            this.setNotaProfesor(e.getNotaProfesor());
-            this.setFechaCreacion(e.getFechaCreacion());
-            this.setFechaNaci(e.getFechaNaci());
-            this.setGenero(e.getGenero());
-        } else {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-                    "Posiblemente el registro no exista");
-            FacesContext.getCurrentInstance().addMessage("profesorJsonForm:codigo", msg);
-
-        }
+    public void recupera(String codigo) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(URI + "/" + codigo);
+        JsonObject response = target.request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+            codigo = response.asJsonObject().getString("codigo");
+            nombreCompleto = response.asJsonObject().getString("nombreCompleto");
+            materia = response.asJsonObject().getString("materia");
+            notaProfesor = response.asJsonObject().getInt("notaProfesor");
+            fechaCreacion = format.parse(response.asJsonObject().getString("fechaCreacion"));
+            fechaNaci = format.parse(response.asJsonObject().getString("fechaNaci"));
+            genero = response.asJsonObject().getString("genero");
+            salida = response.toString();
     }
     
     public void creaJson() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         String fecha1 = format.format(this.getFechaCreacion());
         String fecha2= format.format(this.getFechaNaci());
         JsonObjectBuilder creadorJson = Json.createObjectBuilder();
@@ -105,90 +119,17 @@ public class ProfesorController extends Profesor implements Serializable{
             this.setCodigo(objectJson.getString("codigo"));
             this.setNombreCompleto(objectJson.getString("nombreCompleto"));
             this.setMateria(objectJson.getString("materia"));
-            this.setNotaProfesor(objectJson.getInt("notaProfesor"));
+             this.setNotaProfesor(objectJson.getInt("notaProfesor"));
             this.setFechaCreacion(format.parse(objectJson.getString("fechaCreacion")));
             this.setFechaNaci(format.parse(objectJson.getString("fechaNaci")));
-            this.setGenero(objectJson.getString("genero").charAt(0));
+            this.setGenero(objectJson.getString("genero"));
         } catch (ParseException ex) {
             Logger.getLogger(ProfesorController.class.getName()).
                     log(Level.SEVERE, null, ex);
         }
 
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTiraJson() {
-        return tiraJson;
-    }
-
-    public void setTiraJson(String tiraJson) {
-        this.tiraJson = tiraJson;
-    }
-
-    public String getSalida() {
-        return salida;
-    }
-
-    public void setSalida(String salida) {
-        this.salida = salida;
-    }
-    
-//    public void hacerGetAll() {
-//        Client client = ClientBuilder.newClient();
-//        WebTarget target = client.target(URI);
-//        JsonArray response = target.request(MediaType.APPLICATION_JSON)
-//                .get(JsonArray.class);
-//        salida = response.toString();
-//    }
-//
-//
-//    public void hacerGet() {
-//        Client client = ClientBuilder.newClient();
-//        WebTarget target = client.target(URI + "/" + id);
-//        JsonObject response = target.request(MediaType.APPLICATION_JSON)
-//                .get(JsonObject.class);
-//        salida = response.toString();
-//    }
-//
-//
-//    public void hacerDelete() {
-//        Client client = ClientBuilder.newClient();
-//        WebTarget target = client.target(URI + "/" + id);
-//        JsonObject response = target.request(MediaType.APPLICATION_JSON)
-//                .delete(JsonObject.class);
-//        salida = response.asJsonObject().toString();
-//    }
-//
-//
-//    public void hacerPut() {
-//        Client client = ClientBuilder.newClient();
-//        WebTarget target = client.target(URI);
-//        JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
-//        JsonObject jsonObject = lectorJson.readObject();
-//        Response response = target.request(MediaType.APPLICATION_JSON)
-//                .put(Entity.json(jsonObject));
-//        salida = response.readEntity(String.class);
-//    }
-//
-//
-//    public void hacerPost() {
-//        Client client = ClientBuilder.newClient();
-//        WebTarget target = client.target(URI);
-//        JsonReader lectorJson = Json.createReader(new StringReader(tiraJson));
-//        JsonObject jsonObject = lectorJson.readObject();
-//        Response response = target.request(MediaType.APPLICATION_JSON)
-//                .post(Entity.json(jsonObject));
-//        salida = response.readEntity(String.class);
-//    }
-    
-    
+       
     public void respaldo() {
         ZipOutputStream out = null;
         try {
@@ -237,5 +178,85 @@ public class ProfesorController extends Profesor implements Serializable{
             }
         }
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTiraJson() {
+        return tiraJson;
+    }
+
+    public void setTiraJson(String tiraJson) {
+        this.tiraJson = tiraJson;
+    }
+
+    public String getSalida() {
+        return salida;
+    }
+
+    public void setSalida(String salida) {
+        this.salida = salida;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public String getMateria() {
+        return materia;
+    }
+
+    public void setMateria(String materia) {
+        this.materia = materia;
+    }
+
+    public double getNotaProfesor() {
+        return notaProfesor;
+    }
+
+    public void setNotaProfesor(double notaProfesor) {
+        this.notaProfesor = notaProfesor;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Date getFechaNaci() {
+        return fechaNaci;
+    }
+
+    public void setFechaNaci(Date fechaNaci) {
+        this.fechaNaci = fechaNaci;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
     }
 }

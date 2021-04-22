@@ -5,7 +5,7 @@
  */
 package ws;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import static com.mysql.cj.MysqlType.JSON;
 import gestion.ProfesorGestion;
 import java.util.List;
@@ -59,35 +59,35 @@ public class ProfesorWS {
      */
     
     @GET
-    @Path("/{id}")
+    @Path("/{codigo}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Profesor getProfesor(@PathParam("id") String codigo) {
+    public Profesor getProfesor(@PathParam("codigo") String codigo) {
         return ProfesorGestion.getProfesor(codigo);
     }
 
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Profesor putProfesor(Profesor profesor) {
-        Profesor profesor2 = ProfesorGestion.getProfesor(profesor.getCodigo());
-        if (profesor2 != null) {
-            ProfesorGestion.updateProfesor(profesor);
-        } else {
-            ProfesorGestion.insertProfesor(profesor);
-        }
-        return ProfesorGestion.getProfesor(profesor.getCodigo());
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Profesor postProfesor(Profesor profesor) {
-        Profesor profesor2 = ProfesorGestion.getProfesor(profesor.getCodigo());
-        if (profesor2 != null) {
-            return null;
-        } else {
-            ProfesorGestion.insertProfesor(profesor);
-        }
-        return ProfesorGestion.getProfesor(profesor.getCodigo());
-    }
+//    @PUT
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public Profesor putProfesor(Profesor profesor) {
+//        Profesor profesor2 = ProfesorGestion.getProfesor(profesor.getCodigo());
+//        if (profesor2 != null) {
+//            ProfesorGestion.updateProfesor(profesor);
+//        } else {
+//            ProfesorGestion.insertProfesor(profesor);
+//        }
+//        return ProfesorGestion.getProfesor(profesor.getCodigo());
+//    }
+//
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public Profesor postProfesor(Profesor profesor) {
+//        Profesor profesor2 = ProfesorGestion.getProfesor(profesor.getCodigo());
+//        if (profesor2 != null) {
+//            return null;
+//        } else {
+//            ProfesorGestion.insertProfesor(profesor);
+//        }
+//        return ProfesorGestion.getProfesor(profesor.getCodigo());
+//    }
 
 //    @DELETE
 //    @Path("/{id}")
